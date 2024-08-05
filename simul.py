@@ -1,6 +1,6 @@
 from typing import *
 import pandas as pd
-from model import Server, Benign, Cheater
+from model.model import Server, Benign, Cheater
 
 
 
