@@ -1,6 +1,7 @@
 from typing import *
 import pandas as pd
 import numpy as np
+import altair as alt
 import matplotlib.pyplot as plt
 from simul import simulate_with_liar, simulate_without_liar
 
@@ -74,9 +75,9 @@ def scatter_and_line(fig = None, ax = None,  do_lie = False, tactic: Literal["ra
 
 
 def contour(fig = None, ax = None, do_lie = False, tactic: Literal["random", "select"] = "random"):
-    TOTAL_USER = 50
+    TOTAL_USER = 100
     vote_cnt = 2
-    match_cnt = 3
+    match_cnt = 1
     model_acc = np.linspace(1.0, 0.5, TOTAL_USER // 2).tolist()
     cheat_rate = []
     sim_acc = []
@@ -109,25 +110,27 @@ def contour(fig = None, ax = None, do_lie = False, tactic: Literal["random", "se
     return fig, ax
 
 
-def plot_one_third_cheater(fig = None, ax = None, vote_cnt=2, do_lie = False, tactic: Literal["random", "select"] = "random"):
+def plot_one_third_cheater(fig = None, ax = None, do_lie = False, tactic: Literal["random", "select"] = "random"):
 
     TOTAL_USER = 100
     cheat_user = 33
+    vote_cnt = 2
+    match_cnt = 10
     model_acc = np.linspace(1.0, 0.5, TOTAL_USER // 2).tolist()
 
     sim_ret = []
     for acc in model_acc:
         if do_lie is True:
-            benign, cheater, _ = simulate_with_liar(model_acc=acc, played_match=1, vote_per_match=vote_cnt, benign_num=TOTAL_USER - cheat_user, cheater_num=cheat_user, tactic=tactic)
+            benign, cheater, _ = simulate_with_liar(model_acc=acc, played_match=match_cnt, vote_per_match=vote_cnt, benign_num=TOTAL_USER - cheat_user, cheater_num=cheat_user, tactic=tactic)
         elif do_lie is False:
-            benign, cheater, _ = simulate_without_liar(model_acc=acc, played_match=1, vote_per_match=vote_cnt, benign_num=TOTAL_USER - cheat_user, cheater_num=cheat_user)
+            benign, cheater, _ = simulate_without_liar(model_acc=acc, played_match=match_cnt, vote_per_match=vote_cnt, benign_num=TOTAL_USER - cheat_user, cheater_num=cheat_user)
         
         benign_dub = [benign[key][0] for key in benign.keys()]
         cheater_dub = [cheater[key][0] for key in cheater.keys()]
         correct = len(list(filter(lambda x: x < 0, benign_dub))) + len(
             list(filter(lambda x: x > 0, cheater_dub))
         )
-        sim_ret.append(correct / (TOTAL_USER * vote_cnt))
+        sim_ret.append(correct / (TOTAL_USER * match_cnt))
 
     if fig is None and ax is None:
         fig, ax = plt.subplots()
@@ -196,5 +199,31 @@ def figure_2():
     plt.show()    
     
 
+def figure_appendix(playdata, e, cheater):
+    for bat in playdata['battle']:
+        bat['parti'] = str(bat['parti'])
+        
+    source = pd.DataFrame([bat for bat in playdata['battle']])
+    chart = alt.Chart(source).mark_bar().encode(
+        x='start',
+        x2='end',
+        y='parti'
+    )
+    
+    chart.save(f'img/battle/{playdata["game"]}-battle.png')
+    
+    if len(playdata['votes']) == 0:
+        return
+    source = pd.DataFrame([vote for vote in playdata['votes']])
+    chart = alt.Chart(source).mark_bar().encode(
+        x='start',
+        x2='end',
+        y='target'
+    )
+    
+    chart.save(f'img/battle/{playdata["game"]}-vote.png')
+    return
+
+
 if __name__ == '__main__':
-    figure_2()
+    figure_1()
