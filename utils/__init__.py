@@ -1,0 +1,4 @@
+
+Config = {
+    "debug": True,
+}
