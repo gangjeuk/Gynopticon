@@ -1,3 +1,6 @@
+import os, sys
+
+sys.path.append(os.path.dirname(".."))
 import matplotlib.pyplot as plt
 from res.Botscreen.utils import *
 import logging
@@ -165,7 +168,13 @@ for i,test_games in enumerate(e.splits):
                     # Custom 3 - ignore self voting
                     if max_score > thresh:
                         do_vote = True
+                        # Lier 1 - Cheater won't report oneself to a server
+                        if str(ob) in e.cheater[match] and ob == obd:
+                            do_vote = False
                         votes[ob][obd] = True
+                        # Lier 2 - NOTE! that cheaters also have to vote anyway, unless they don't want to defect themselves.
+                        if str(ob) in e.cheater[match]:
+                            votes[ob][obd] = random.choices([True, False], weights=[0.5, 0.5])[0]
                         voter |= set(str(ob))
                         target_obd.append(obd)
                         
@@ -181,6 +190,9 @@ for i,test_games in enumerate(e.splits):
                             # Custom 2 - limit voter to real observer
                             if max_score < thresh and len(obd_slide) >= 20 and target != ob:
                                 votes[ob][target] = False
+                                # Lier 3 - random select!
+                                if str(ob) in e.cheater[match]:
+                                    votes[ob][target] = random.choices([True, False], weights=[0.5, 0.5])[0]
                                 voter |= set(str(ob))     
                 for target in player_id:
                     vote_to_obd = list(zip(*votes))[target]
