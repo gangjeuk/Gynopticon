@@ -45,7 +45,7 @@ class Cheater(User):
             ret.append(val[0])
 
         # do lie selectively
-        if self.is_lier is True and self.tactic == "random":
+        if self.is_lier is True:# and self.tactic == "random":
             lies = []
             for i in ret:
                 do_change = random.choices(
