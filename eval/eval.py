@@ -1,3 +1,6 @@
+import os, sys
+
+sys.path.append(os.path.dirname(".."))
 import matplotlib.pyplot as plt
 from res.Botscreen.utils import *
 import logging
@@ -127,7 +130,7 @@ for i,test_games in enumerate(e.splits):
         
         total_series = np.array([])
         
-        rst_dir = f'trained_models/vote-{i}-{match}.pickle'
+        rst_dir = f'trained_models/vote-without-liar-{i}-{match}.pickle'
         # oberser and observed player
         try:
             scores, times, battles = pickle.load(open(rst_dir, 'rb'))
@@ -145,11 +148,11 @@ for i,test_games in enumerate(e.splits):
             total_series = np.unique(total_series)
             
 
-            battles = {"match": match, "timeline": total_series, \
-                "battle":[{"votes":[], "voter":set(), \
-                        "dubious":[], \
-                        "start":0, "end":0}]
-                    }
+            battles = {"match": match, "timeline": total_series, "cheater": e.cheater[match], \
+                       "battle":[{"votes":[], "voter":set(), \
+                            "dubious":[], \
+                            "start":0, "end":0}] \
+                      }
     
         for battle_slide in consecutive_groups(total_series):
             battle_slide = list(battle_slide)
@@ -211,7 +214,7 @@ for i,test_games in enumerate(e.splits):
                 '''
             battle = {"votes": votes, "voter": voter, \
                       "start": b_bgn, "end": b_end, \
-                      "dubious": server.dubious}
+                      "dubious": server.dubious, "validity": server.validity}
             
             battles['battle'].append(battle)
 
