@@ -13,3 +13,9 @@ __pycache__/
 
 # Virtual env
 env/
+
+# Data
+data/
+
+# Botscren
+trained_models

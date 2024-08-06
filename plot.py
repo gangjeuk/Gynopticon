@@ -4,6 +4,7 @@ import numpy as np
 import altair as alt
 import matplotlib.pyplot as plt
 from simul import simulate_with_liar, simulate_without_liar
+from utils import Config
 
 def boxplot(fig = None, ax = None, do_lie = False, tactic: Literal["random", "select"] = "random"):
     if do_lie is True:
@@ -18,7 +19,7 @@ def boxplot(fig = None, ax = None, do_lie = False, tactic: Literal["random", "se
         
     ax.boxplot([benign_dub, cheater_dub])
     ax.set_ylim(-1.1, 1.1)
-    ax.set_ylabel("Dubious")
+    ax.set_ylabel("Dubious", labelpad=0.0)
     ax.set_xticks([1, 2], ["Benign user", "Cheating User"])
     return fig, ax 
 
@@ -51,7 +52,7 @@ def scatter_and_line(fig = None, ax = None,  do_lie = False, tactic: Literal["ra
         fig, ax = plt.subplots()
     ax.set_ylim(-1.2, 1.2)
     ax.set_xlim(0.5, 1.0)
-    ax.set_ylabel("Dubious")
+    ax.set_ylabel("Dubious", labelpad=0.0)
     ax.set_xlabel("Model Acc")
 
     # plot
@@ -144,7 +145,7 @@ def plot_one_third_cheater(fig = None, ax = None, do_lie = False, tactic: Litera
 def figure_1():
     global LIE_TYPE, LIE_FREQ
     LIE_TYPE = 'random'
-
+    
     fig, axs = plt.subplots(2, 3)
     boxplot(fig, axs[0, 0])
     boxplot(fig, axs[0, 1], do_lie=True, tactic="random")
@@ -161,13 +162,15 @@ def figure_1():
     axs[1, 1].set_title('(2) With random liar')
     axs[1, 2].set_title('(3) With tactical liar')
     
-    plt.suptitle("(a) Dubious score after simulation with fixed model acc (90%)")
+    plt.suptitle("(a) Dubious score after simulation with fixed model acc (90%)", fontsize='x-large', fontweight='bold')
     # Adjust vertical_spacing = 0.5 * axes_height
     plt.subplots_adjust(hspace=0.5)
 
     # Add text in figure coordinates
-    plt.figtext(0.5, 0.5, '(b) Distribution of dubious score', ha='center', va='center', fontdict={'fontsize': 'large'})
-    plt.show()    
+    plt.figtext(0.5, 0.485, '(b) Distribution of dubious score', ha='center', va='center', fontdict={'fontsize': 'x-large', 'fontweight': 'bold'})
+    fig.set_figwidth(13)
+    fig.set_figheight(7)
+    plt.savefig(fname='img/figure1.png', bbox_inches='tight', pad_inches=0)
     
 def figure_2():
     global LIE_TYPE, LIE_FREQ
@@ -189,14 +192,16 @@ def figure_2():
     axs[1, 1].set_title('(2) With random liar')
     axs[1, 2].set_title('(3) With tactical liar')
     
-    plt.suptitle("(a) Accuracy with fixed cheater rate (33%)")
+    plt.suptitle("(a) Accuracy with fixed cheater rate (33%)", fontsize='x-large', fontweight='bold')
     # Adjust vertical_spacing = 0.5 * axes_height
     plt.subplots_adjust(hspace=0.5)
 
     # Add text in figure coordinates
-    plt.figtext(0.5, 0.5, '(b) Contour of accuracy', ha='center', va='center', fontdict={'fontsize': 'large'})
+    plt.figtext(0.5, 0.485, '(b) Contour of accuracy', ha='center', va='center', fontdict={'fontsize': 'x-large', 'fontweight': 'bold'})
     
-    plt.show()    
+    fig.set_figwidth(13)
+    fig.set_figheight(7)
+    plt.savefig(fname='img/figure2.png', bbox_inches='tight', pad_inches=0)  
     
 
 def figure_appendix(playdata, e, cheater):
@@ -227,3 +232,4 @@ def figure_appendix(playdata, e, cheater):
 
 if __name__ == '__main__':
     figure_1()
+    figure_2()
