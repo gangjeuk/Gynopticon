@@ -1,7 +1,9 @@
+import os, sys
+
+sys.path.append(os.path.dirname(__file__))
 from typing import *
 import pandas as pd
 from model.model import Server, Benign, Cheater
-
 
 
 def simulate_without_liar(
