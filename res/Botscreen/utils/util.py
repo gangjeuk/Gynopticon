@@ -476,7 +476,8 @@ def eval_vote_preds(eval_trues, vote_scores, incl_cnt=False):
 
         p_agg_prec.extend(p_prec)
         p_agg_acc.extend(p_acc)
-
+    print(f"thresh acc - {thresh_acc}")
+    print(f"thresh prec - {thresh_prec}")
     # evaluation metrics: best_acc, best_prec, auc_roc
     b_acc = best_acc(s_agg, t_agg)
     b_prec = get_stats(p_agg_prec, t_agg)[0]
@@ -485,7 +486,7 @@ def eval_vote_preds(eval_trues, vote_scores, incl_cnt=False):
     conf_mat = conf_matrix(p_agg_acc, t_agg)
 
     if incl_cnt:
-        return b_acc, b_prec, auc, len(p_agg_prec), *conf_mat
+        return b_acc, b_prec, auc, len(p_agg_prec), *conf_mat, s_agg, t_agg, thresh_prec, thresh_acc
     else:
         return b_acc, b_prec, auc, len(p_agg_prec)
 

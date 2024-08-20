@@ -45,7 +45,7 @@ class Cheater(User):
             ret.append(val[0])
 
         # do lie selectively
-        if self.is_lier is True:# and self.tactic == "random":
+        if self.is_lier is True and self.tactic == "random":
             lies = []
             for i in ret:
                 do_change = random.choices(
@@ -80,7 +80,7 @@ class Benign(User):
 class Server:
     # give more weight on history weight
     def __init__(
-        self, benign_num, cheater_num, cons_weight=0.1, his_weight=0.02, max_his_record=10
+        self, benign_num, cheater_num, cons_weight=0.05, his_weight=0.01, max_his_record=10
     ):
         self.user_num = benign_num + cheater_num
         # higher is better
@@ -163,7 +163,7 @@ class Server:
                 s += C * self.validity.get(j)
             # user dubious should -1.0 <= dubious <= 1.0
             self.dubious[target_user] += s
-            self.__check_dubious(target_user)
+            #self.__check_dubious(target_user)
 
     def check_history(self, user_name):
         his = self.history.get(user_name)

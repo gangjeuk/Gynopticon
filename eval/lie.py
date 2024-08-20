@@ -16,8 +16,8 @@ else:
 ########## Gynopticon #########
 # evaluation result
 res = []
+table_output = pd.DataFrame()
 dubious_scores = {}
-
 ########## Gynopticon-end #########
 
 # split experiments into k folds
@@ -117,7 +117,6 @@ for i,test_games in enumerate(e.splits):
     # for each match
     for match in test_games:
         from model.customized import Server
-        from plot import figure_appendix
         
         info(f"evaluate match: {match}")
         _, player_num = e.exp_info[match[0]]
@@ -125,12 +124,14 @@ for i,test_games in enumerate(e.splits):
         server = Server(user_num=player_num)
 
         player_id = range(player_num)
-        
+
+        cnt = dict(zip([f'user_{i}' for i in player_id], [0 for _ in player_id]))
+
         scores, times = {}, {}
         
         total_series = np.array([])
         
-        rst_dir = f'trained_models/vote-{i}-{match}.pickle'
+        rst_dir = f'trained_models/vote-with-liar-{i}-{match}.pickle'
         # oberser and observed player
         try:
             scores, times, battles = pickle.load(open(rst_dir, 'rb'))
@@ -199,7 +200,8 @@ for i,test_games in enumerate(e.splits):
                     t_cnt, f_cnt = vote_to_obd.count(True), vote_to_obd.count(False)
                     if (t_cnt + f_cnt) > 2:
                         if (t_cnt > f_cnt) and ((match == '2_2') or (match == '3_4') or (match == '2_5')):
-                            debug(f'target{target} - {t_cnt}, {f_cnt} : {vote_to_obd}')
+                            cnt[f'user_{target}'] += 1
+                            #debug(f'target{target} - {t_cnt}, {f_cnt} : {vote_to_obd}')
                         server.make_cons(vote_to_obd, target)       
                 '''
                 # Only target user
@@ -226,23 +228,25 @@ for i,test_games in enumerate(e.splits):
                       "dubious": server.dubious}
             
             battles['battle'].append(battle)
-
+            
+        debug(f'cnt: {cnt}')
         debug(f'cheater: {e.cheater[match]}')
         debug(f'final dubious score: {server.dubious}')
         debug(f'final validity score: {server.validity}')
 
         # end of match
         dubious_scores[match] = np.array(list(server.dubious.values()))
-        
         pickle.dump((scores, times, battles), open(rst_dir, 'wb'))
-    
+        table_output = table_output.append(pd.DataFrame([cnt, server.dubious, server.validity], [[match]*3,['count', 'dubious', 'validity']]))
+
     # end of splited games #
     res.append(eval_vote_preds(eval_trues, dubious_scores, incl_cnt=True))
     dubious_scores = {}
 # aggregating results from all splits
 res = np.array(res)
+print(table_output.to_latex(float_format="%.2f", formatters={'count': int}, longtable=True, na_rep=0))
 b_acc, b_prec, auc = np.average(res[:,:3], axis=0, weights=res[:,3])
-tp, tn, fp, fn = np.sum(res[:,4:], axis=0, dtype=int)
+tp, tn, fp, fn = np.sum(res[:,4:8], axis=0, dtype=int)
 info(f'best_acc: {b_acc:.4f}, best_prec: {b_prec:.4f}, auc_roc: {auc:.4f}')
 info(f'TP: {tp}, TN: {tn}, FP: {fp}, FN: {fn}')
 ##################%%% Gynopticon end %%%###################
