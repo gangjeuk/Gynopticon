@@ -29,7 +29,7 @@ Each directory and file in the repository are related with each section in the p
 |/model/model.py |Simulation code|Section 2 (Gynopticon: a...)|
 |/model/customized.py|Customized consensus algorithm for testing on FPS genre|Section 3 (Evaluation)|
 |/eval/eval.py|Evaluation when without liar|Section 3.5 (Results)|
-|/eval/lie.py|Evaluation when with liar|Sectio 3.5 (Results)|
+|/eval/lie.py|Evaluation when with liar|Section 3.5 (Results)|
 |/plot.py|Generates figures in the paper| All | 
 
 # Reproducing the results
