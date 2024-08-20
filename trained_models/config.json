@@ -1,0 +1,11 @@
+{
+    "bat_size": 64,
+    "duration": 10,
+    "n_epoch": 64,
+    "n_hidden": 64,
+    "n_layer": 3,
+    "n_split": 7,
+    "seed": 3,
+    "stride": 2,
+    "win_size": 20
+}
