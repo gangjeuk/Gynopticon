@@ -1,7 +1,7 @@
 from typing import *
 import pandas as pd
 import numpy as np
-import altair as alt
+#import altair as alt
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import matplotlib as mpl
@@ -207,7 +207,7 @@ def figure_2():
     fig.set_figheight(7)
     plt.savefig(fname='img/figure2.pdf', bbox_inches='tight', pad_inches=0)  
     
-
+'''
 def figure_appendix(playdata, e, cheater):
     for bat in playdata['battle']:
         bat['parti'] = str(bat['parti'])
@@ -232,7 +232,7 @@ def figure_appendix(playdata, e, cheater):
     
     chart.save(f'img/battle/{playdata["game"]}-vote.png')
     return
-
+'''
 def boxplot_figure_3(fig = None, ax = None, normal_score = (), cheater_score = ()):
     
     if ax is None:
