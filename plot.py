@@ -13,9 +13,9 @@ import seaborn as sns
 
 def boxplot(fig = None, ax = None, do_lie = False, tactic: Literal["random", "select"] = "random"):
     if do_lie is True:
-        benign, cheater, _ = simulate_with_liar(model_acc=0.8, played_match=20, vote_per_match=2, benign_num=2, cheater_num=1, tactic=tactic)
+        benign, cheater, _ = simulate_with_liar(model_acc=0.8, played_match=20, vote_per_match=1, benign_num=2, cheater_num=1, tactic=tactic)
     elif do_lie is False:
-        benign, cheater, _ = simulate_without_liar(model_acc=0.8, played_match=20, vote_per_match=2, benign_num=2, cheater_num=1)
+        benign, cheater, _ = simulate_without_liar(model_acc=0.8, played_match=20, vote_per_match=1, benign_num=2, cheater_num=1)
 
     benign_dub = [benign[key][0] for key in benign.keys()]
     cheater_dub = [cheater[key][0] for key in cheater.keys()]
@@ -23,7 +23,7 @@ def boxplot(fig = None, ax = None, do_lie = False, tactic: Literal["random", "se
         fig, ax = plt.subplots()
         
     ax.boxplot([benign_dub, cheater_dub])
-    ax.set_ylim(-2, 2)
+    ax.set_ylim(-2.5, 2.5)
     ax.set_ylabel("Dubious", labelpad=0.0)
     ax.set_xticks([1, 2], ["Benign user", "Cheating User"])
     return fig, ax 
@@ -39,9 +39,9 @@ def scatter_and_line(fig = None, ax = None,  do_lie = False, tactic: Literal["ra
         # function call below assume
         # played 10 games and 2 votes per each game
         if do_lie is True:
-            benign, cheater, _ = simulate_with_liar(model_acc=acc, played_match=10, vote_per_match=2, benign_num=2, cheater_num=1, tactic=tactic)
+            benign, cheater, _ = simulate_with_liar(model_acc=acc, played_match=10, vote_per_match=1, benign_num=2, cheater_num=1, tactic=tactic)
         elif do_lie is False:
-            benign, cheater, _ = simulate_without_liar(model_acc=acc, played_match=10, vote_per_match=2, benign_num=2, cheater_num=1)
+            benign, cheater, _ = simulate_without_liar(model_acc=acc, played_match=10, vote_per_match=1, benign_num=2, cheater_num=1)
         benign_dub = [benign[key][0] for key in benign.keys()]
         cheater_dub = [cheater[key][0] for key in cheater.keys()]
         # scatter
@@ -55,7 +55,7 @@ def scatter_and_line(fig = None, ax = None,  do_lie = False, tactic: Literal["ra
 
     if fig is None and ax is None:  
         fig, ax = plt.subplots()
-    ax.set_ylim(-1.7, 1.7)
+    ax.set_ylim(-2.5, 2.5)
     ax.set_xlim(0.5, 1.0)
     ax.set_ylabel("Dubious", labelpad=0.0)
     ax.set_xlabel("Model Acc")
@@ -205,6 +205,7 @@ def figure_2():
     
     fig.set_figwidth(13)
     fig.set_figheight(7)
+    plt.savefig(fname='img/figure2.png', bbox_inches='tight', pad_inches=0)  
     plt.savefig(fname='img/figure2.pdf', bbox_inches='tight', pad_inches=0)  
     
 '''
@@ -242,7 +243,7 @@ def boxplot_figure_3(fig = None, ax = None, normal_score = (), cheater_score = (
     ax.boxplot([normal_score[0], cheater_score[0]], labels=["Benign user", "Cheating User"])
     ax.set_ylabel("Dubious score", labelpad=0.0)
     
-    ax.axhline(y=0, color='lightgray', linestyle='-', linewidth=8, label='Zoomed', alpha=0.4)
+    ax.axhline(y=0, color='lightgray', linestyle='-', linewidth=16, label='Zoomed', alpha=0.4)
     
     FN_cases = np.where(normal_score[0] > 0, True, False)
     TP_cases = np.where(normal_score[0] < 0, True, False)
@@ -264,7 +265,7 @@ def boxplot_figure_3(fig = None, ax = None, normal_score = (), cheater_score = (
     # Zooming
     axins = zoomed_inset_axes(ax, 4, loc='upper left', axes_kwargs={'facecolor': 'lightgray'})
     # for labeling
-    axins.axhline(y=0, color='lightgray', linestyle='-', linewidth=5, label='Zoomed', alpha=0.4)
+    axins.axhline(y=0, color='lightgray', linestyle='-', linewidth=7, label='Zoomed', alpha=0.4)
     axins.axhline(y=0, color='#ff3300', linestyle='--', linewidth=1, label='Threshold')
     
     axins.scatter([0.05 for _ in range(len(TP[TP != None]))], TP[TP != None],alpha=0.8, color='g', vmin=0.2, vmax=0.2, label="True Positive/Negative")
@@ -289,9 +290,7 @@ def figure_3():
 
     from eval.eval import res as eval_res
     from eval.lie import res as lie_res
-    
-    from eval.eval import validity_scores as eval_val
-    from eval.lie import validity_scores as lie_val 
+
     fig = plt.figure()
     gs = fig.add_gridspec(3,3)
     sns.set_palette('bright')
