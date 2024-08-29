@@ -65,7 +65,7 @@ class Server:
         
         if t_cnt > f_cnt:
             s = 0.0
-            # Custom 3 - relect ratio of voters
+            # Custom 3 - reflect ratio of voters
             C = 1
             for i in range(self.user_num):
                 if votes[i] is False:
@@ -79,8 +79,7 @@ class Server:
             
             target_user_name = f"user_{target_user}"
             self.dubious[target_user_name] += s
-            # Custom 4 - no dubious score limitation
-            #self.__check_dubious(target_user_name)
+
          
 
     def check_history(self, user_name):
