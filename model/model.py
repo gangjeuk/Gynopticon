@@ -85,7 +85,7 @@ class Server:
         self.user_num = benign_num + cheater_num
         # higher is better
         self.validity = {f"user_{i}": 1.0 for i in range(benign_num)} | {
-            f"cheater_{i}": 0.0 for i in range(cheater_num)
+            f"cheater_{i}": 1.0 for i in range(cheater_num)
         }
         # Lower is better
         self.dubious = {f"user_{i}": 0.0 for i in range(benign_num)} | {

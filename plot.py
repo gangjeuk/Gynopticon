@@ -23,7 +23,7 @@ def boxplot(fig = None, ax = None, do_lie = False, tactic: Literal["random", "se
         fig, ax = plt.subplots()
         
     ax.boxplot([benign_dub, cheater_dub])
-    ax.set_ylim(-2.5, 2.5)
+    ax.set_ylim(-4, 4)
     ax.set_ylabel("Dubious", labelpad=0.0)
     ax.set_xticks([1, 2], ["Benign user", "Cheating User"])
     return fig, ax 
@@ -39,9 +39,9 @@ def scatter_and_line(fig = None, ax = None,  do_lie = False, tactic: Literal["ra
         # function call below assume
         # played 10 games and 2 votes per each game
         if do_lie is True:
-            benign, cheater, _ = simulate_with_liar(model_acc=acc, played_match=10, vote_per_match=1, benign_num=2, cheater_num=1, tactic=tactic)
+            benign, cheater, _ = simulate_with_liar(model_acc=acc, played_match=10, vote_per_match=2, benign_num=2, cheater_num=1, tactic=tactic)
         elif do_lie is False:
-            benign, cheater, _ = simulate_without_liar(model_acc=acc, played_match=10, vote_per_match=1, benign_num=2, cheater_num=1)
+            benign, cheater, _ = simulate_without_liar(model_acc=acc, played_match=10, vote_per_match=2, benign_num=2, cheater_num=1)
         benign_dub = [benign[key][0] for key in benign.keys()]
         cheater_dub = [cheater[key][0] for key in cheater.keys()]
         # scatter
@@ -55,7 +55,7 @@ def scatter_and_line(fig = None, ax = None,  do_lie = False, tactic: Literal["ra
 
     if fig is None and ax is None:  
         fig, ax = plt.subplots()
-    ax.set_ylim(-2.5, 2.5)
+    ax.set_ylim(-7, 7)
     ax.set_xlim(0.5, 1.0)
     ax.set_ylabel("Dubious", labelpad=0.0)
     ax.set_xlabel("Model Acc")
