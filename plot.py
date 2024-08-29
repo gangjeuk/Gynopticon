@@ -189,7 +189,7 @@ def figure_2():
     contour(fig, axs[1, 1], do_lie=True, tactic="random")
     contour(fig, axs[1, 2], do_lie=True, tactic="select")
 
-    axs[0, 0].set_title('(1) Without liar', fontdict={'fontsize': 'xx-large'})
+    axs[0, 0].set_title('(1) Without liar', fontdict={'fontsize': 'x-large'})
     axs[0, 1].set_title('(2) With random liar' , fontdict={'fontsize': 'x-large'})
     axs[0, 2].set_title('(3) With tactical liar' , fontdict={'fontsize': 'x-large'})
     axs[1, 0].set_title('(1) Without liar' , fontdict={'fontsize': 'x-large'})
