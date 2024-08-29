@@ -95,6 +95,9 @@ def exp_from_arguments():
         frames_loaded = False
 
     # filter frames if the configuration does not match
+    if not os.path.exists('data'):
+        print("download dataset and locate it first")
+        exit(1)
     if not arg.chk_frames or not frames_loaded:
         arg.frames, arg.cheater, arg.times = {}, {}, {}
         for e in arg.exp_info.keys():
