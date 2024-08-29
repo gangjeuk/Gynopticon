@@ -120,7 +120,7 @@ def plot_one_third_cheater(fig = None, ax = None, do_lie = False, tactic: Litera
 
     TOTAL_USER = 100
     cheat_user = 33
-    vote_cnt = 2
+    vote_cnt = 1
     match_cnt = 10
     model_acc = np.linspace(1.0, 0.5, TOTAL_USER // 2).tolist()
 
